@@ -1,28 +1,30 @@
 ﻿@page "/week"
 <h3>Week View</h3>
 
+<input type="week" name="week" id="camp-week"
+       min="2023-W01" value="2023-W01" required>
 
 <div class="week-container">
     <div class="day-container">
-        Sunday
+        <DayList Day="DayOfWeek.Sunday" />
     </div>
     <div class="day-container">
-        Monday
+        <DayList Day="DayOfWeek.Monday" />
     </div>
     <div class="day-container">
-        Tuesday
+        <DayList Day="DayOfWeek.Tuesday" />
     </div>
     <div class="day-container">
-        Wednesday
+        <DayList Day="DayOfWeek.Wednesday" />
     </div>
     <div class="day-container">
-        Thursday
+        <DayList Day="DayOfWeek.Thursday" />
     </div>
     <div class="day-container">
-        Friday
+        <DayList Day="DayOfWeek.Friday" />
     </div>
     <div class="day-container">
-        Saturday
+        <DayList Day="DayOfWeek.Saturday" />
     </div>
 </div>
 
