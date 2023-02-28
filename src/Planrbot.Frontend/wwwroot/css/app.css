@@ -99,3 +99,26 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+.week-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.day-container {
+    flex-basis: 14.25%;
+    flex-grow: 1;
+    min-width: 150px;
+    border: 1px solid;
+    height: 400px;
+    padding: 4px;
+}
+
+@media (max-width: 945px) {
+    .week-container {
+        flex-direction: column;
+    }
+}
