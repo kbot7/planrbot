@@ -1,34 +1,87 @@
-﻿@page "/week"
+﻿@inject HttpClient Http
+
+@page "/week"
+@using Planrbot.Models;
 <h3>Week View</h3>
 
-<input type="week" name="week" id="camp-week"
-       min="2023-W01" value="2023-W01" required>
+<input  value=@WeekDate @onchange=FilterChangedAsync type="date" id="week" name="week"
+       min="2023-01-01" max="2023-12-31">
 
-<div class="week-container">
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Sunday" />
+<p>@WeekDate</p>
+
+@if (todoItems != null && todoItems.Any())
+{
+    <div class="week-container">
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Sunday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Sunday)" />
+        </div>
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Monday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Monday)" />
+        </div>
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Tuesday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Tuesday)" />
+        </div>
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Wednesday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Wednesday)" />
+        </div>
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Thursday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Thursday)" />
+        </div>
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Friday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Friday)" />
+        </div>
+        <div class="day-container">
+            <DayList Day="DayOfWeek.Saturday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Saturday)" />
+        </div>
     </div>
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Monday" />
-    </div>
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Tuesday" />
-    </div>
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Wednesday" />
-    </div>
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Thursday" />
-    </div>
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Friday" />
-    </div>
-    <div class="day-container">
-        <DayList Day="DayOfWeek.Saturday" />
-    </div>
-</div>
+}
+
+
 
 
 @code {
+
+    private ToDoItem[]? todoItems;
+
+    private async Task ExecuteQuery()
+    {
+        try
+        {
+            todoItems = await Http.GetFromJsonAsync<ToDoItem[]>($"api/ToDo?date={WeekDate:s}");
+        }
+        //catch (AccessTokenNotAvailableException exception)
+        //{
+        //    exception.Redirect();
+        //}
+        catch (Exception ex){}
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        WeekDate = DateTime.Today;
+        await ExecuteQuery();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FilterChangedAsync(ChangeEventArgs args)
+    {
+        WeekDate = DateTime.Parse(args.Value.ToString());
+        await ExecuteQuery();
+    }
+
+    public DateTime WeekDate
+    {
+        get => _weekDate;
+        set
+        {
+            if (value != null)
+            {
+                var date = (DateTime)value;
+                _weekDate = date.AddDays(-(int)date.DayOfWeek);
+            }
+        }
+    }
+    private DateTime _weekDate;
 
 }
