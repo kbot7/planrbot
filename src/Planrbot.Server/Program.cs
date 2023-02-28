@@ -20,10 +20,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
 builder.Services.AddDbContext<MainDbContext>(
-		options => options.UseSqlServer(builder.Configuration.GetConnectionString("Main")));
+		options => options.UseInMemoryDatabase("planrbot"));
+
+//builder.Services.AddDbContext<MainDbContext>(
+//		options => options.UseSqlServer(builder.Configuration.GetConnectionString("Main")));
 
 var app = builder.Build();
 
@@ -33,8 +34,8 @@ if (app.Environment.IsDevelopment())
 	using (var scope = app.Services.CreateScope())
 	{
 		var db = scope.ServiceProvider.GetRequiredService<MainDbContext>();
-		await db.Database.EnsureDeletedAsync();
-		await db.Database.MigrateAsync();
+		//await db.Database.EnsureDeletedAsync();
+		//await db.Database.MigrateAsync();
 		var seeder = new DataSeeder(db);
 		await seeder.SeedAsync();
 	}
