@@ -17,6 +17,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 
 
@@ -43,6 +45,8 @@ if (app.Environment.IsDevelopment())
 if (app.Environment.IsDevelopment())
 {
 	app.UseWebAssemblyDebugging();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 else
 {
