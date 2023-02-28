@@ -1,7 +1,6 @@
 ﻿@inject HttpClient Http
 
 @page "/week"
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 @using Planrbot.Models;
 <h3>Week View</h3>
 
@@ -50,17 +49,25 @@
         {
             todoItems = await Http.GetFromJsonAsync<ToDoItem[]>($"api/ToDo?date={WeekDate:s}");
         }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        //catch (AccessTokenNotAvailableException exception)
+        //{
+        //    exception.Redirect();
+        //}
+        catch (Exception ex){}
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        WeekDate = DateTime.Today;
+        await ExecuteQuery();
+        await base.OnInitializedAsync();
     }
 
     private async Task FilterChangedAsync(ChangeEventArgs args)
     {
         WeekDate = DateTime.Parse(args.Value.ToString());
         await ExecuteQuery();
-        StateHasChanged();
     }
 
     public DateTime WeekDate

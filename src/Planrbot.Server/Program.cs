@@ -9,11 +9,11 @@ using Planrbot.Server.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-	.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
-		.EnableTokenAcquisitionToCallDownstreamApi()
-			.AddDownstreamWebApi("DownstreamApi", builder.Configuration.GetSection("DownstreamApi"))
-			.AddInMemoryTokenCaches();
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//	.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
+//		.EnableTokenAcquisitionToCallDownstreamApi()
+//			.AddDownstreamWebApi("DownstreamApi", builder.Configuration.GetSection("DownstreamApi"))
+//			.AddInMemoryTokenCaches();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -62,7 +62,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 
 app.MapRazorPages();

@@ -31,7 +31,7 @@ public class DataSeeder
 	private List<ToDoItem> GenerateToDoItems()
 	{
 		var items = new List<ToDoItem>();
-		for (int d = -60; d < 60; d++)
+		for (int d = -365; d < 365; d++)
 		{
 			for (int i = 0; i < 4; i++)
 			{
