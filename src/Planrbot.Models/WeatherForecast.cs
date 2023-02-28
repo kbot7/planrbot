@@ -1,4 +1,4 @@
-namespace Planrbot.Web.Shared;
+namespace Planrbot.Models;
 
 public class WeatherForecast
 {

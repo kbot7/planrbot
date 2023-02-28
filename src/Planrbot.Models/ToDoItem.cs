@@ -1,7 +1,8 @@
 ﻿namespace Planrbot.Models;
 public class ToDoItem
 {
-	public string Id { get; set; } = Guid.NewGuid().ToString();
-	public string Description { get; set; }
-	public bool IsComplete { get; set; }
+	public Guid Id { get; set; } = Guid.NewGuid();
+	public DateTime Date { get; set; } = DateTime.Today;
+	public string Description { get; set; } = string.Empty;
+	public bool IsComplete { get; set; } = false;
 }
