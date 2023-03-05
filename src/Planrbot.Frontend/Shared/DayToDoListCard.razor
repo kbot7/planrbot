@@ -1,0 +1,33 @@
+﻿@inject HttpClient Http
+@inject ILogger<DayToDoListCard> Logger
+@using Planrbot.Models;
+
+<MudCard>
+    <MudCardHeader>
+        <MudText Typo="Typo.h6" GutterBottom="true">@Day</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        @foreach (var item in Items.Where(t => t.Date.DayOfWeek == Day))
+        {
+            <MudCheckBox @bind-Checked="@item.IsComplete" @bind-Checked:after="() => ItemChanged(item)" Label="@item.Description" Color="Color.Primary" />
+        }
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Day View</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public DayOfWeek Day { get; set; }
+
+    [Parameter]
+    public IEnumerable<ToDoItem> Items { get; set; }
+
+    private async Task ItemChanged(ToDoItem item)
+    {
+        Logger.LogInformation("Item Changed | Item: {0}", item);
+        var response = await Http.PostAsJsonAsync<ToDoItem>($"api/ToDo/{item.Id}", item);
+        Logger.LogInformation("Item Saved Response | Response: {0}", response);
+    }
+}

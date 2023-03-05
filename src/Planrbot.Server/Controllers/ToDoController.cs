@@ -47,8 +47,8 @@ public class ToDoController : ControllerBase
 		return _db.ToDoItems.SingleAsync(t => t.Id == id);
 	}
 
-	[HttpPost]
-	public async Task SaveById(ToDoItem item)
+	[HttpPost("{id}")]
+	public async Task SaveById([FromRoute]Guid id, [FromBody]ToDoItem item)
 	{
 		_db.Update(item);
 		await _db.SaveChangesAsync();

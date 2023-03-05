@@ -1,5 +1,5 @@
 ﻿namespace Planrbot.Models;
-public class ToDoItem
+public record ToDoItem
 {
 	public Guid Id { get; set; } = Guid.NewGuid();
 	public DateTime Date { get; set; } = DateTime.Today;

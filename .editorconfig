@@ -8,7 +8,7 @@ indent_style = space
 [*.xml]
 indent_size = 2
 
-[*.{csproj,props}]
+[*.{csproj,props,razor,cshtml}]
 indent_size = 4
 tab_width = 4
 indent_style = tab

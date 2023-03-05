@@ -5,10 +5,10 @@ using Microsoft.Identity.Web.Resource;
 using Planrbot.Models;
 
 namespace Planrbot.Web.Server.Controllers;
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+//[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class WeatherForecastController : ControllerBase
 {
 	private static readonly string[] Summaries = new[]

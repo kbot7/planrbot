@@ -1,45 +1,44 @@
 ﻿@inject HttpClient Http
+@inject ILogger<WeekView> Logger
 
 @page "/week"
 @using Planrbot.Models;
-<h3>Week View</h3>
 
-<input  value=@WeekDate @onchange=FilterChangedAsync type="date" id="week" name="week"
-       min="2023-01-01" max="2023-12-31">
+<MudDatePicker @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" />
 
-<p>@WeekDate</p>
+<div class="d-flex flex-column gap-4">
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Prev">Last Week</MudButton>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Today">This Week</MudButton>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Next">Next Week</MudButton>
+</div>
 
 @if (todoItems != null && todoItems.Any())
 {
-    <div class="week-container">
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Sunday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Sunday)" />
-        </div>
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Monday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Monday)" />
-        </div>
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Tuesday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Tuesday)" />
-        </div>
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Wednesday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Wednesday)" />
-        </div>
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Thursday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Thursday)" />
-        </div>
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Friday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Friday)" />
-        </div>
-        <div class="day-container">
-            <DayList Day="DayOfWeek.Saturday" Items="todoItems.Where(t => t.Date.DayOfWeek == DayOfWeek.Saturday)" />
-        </div>
-    </div>
+    <MudGrid>
+        @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+        {
+            <MudItem xs="12" md="6">
+                <DayToDoListCard Day="day" Items="todoItems.Where(t => t.Date.DayOfWeek == day)" />
+            </MudItem>
+        }
+    </MudGrid>
 }
 
-
-
-
 @code {
+
+    MudDatePicker _picker;
+    private async Task Today()
+    {
+        await _picker.GoToDate(DateTime.Today);
+    }
+    private async Task Next()
+    {
+        await _picker.GoToDate(DateTime.Today.AddDays(7));
+    }
+    private async Task Prev()
+    {
+        await _picker.GoToDate(DateTime.Today.AddDays(-7));
+    }
 
     private ToDoItem[]? todoItems;
 
@@ -57,6 +56,13 @@
         StateHasChanged();
     }
 
+    private async Task ItemChanged(ToDoItem item)
+    {
+        Logger.LogInformation("Item Changed | Item: {0}", item);
+        var response = await Http.PostAsJsonAsync<ToDoItem>($"api/ToDo/{item.Id}", item);
+        Logger.LogInformation("Item Saved Response | Response: {0}", response);
+    }
+
     protected override async Task OnInitializedAsync()
     {
         WeekDate = DateTime.Today;
@@ -64,13 +70,7 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task FilterChangedAsync(ChangeEventArgs args)
-    {
-        WeekDate = DateTime.Parse(args.Value.ToString());
-        await ExecuteQuery();
-    }
-
-    public DateTime WeekDate
+    public DateTime? WeekDate
     {
         get => _weekDate;
         set
