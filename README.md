@@ -1,6 +1,8 @@
 # planrbot
 A personal planner app
 
+![Planner](planner.PNG)
+
 # Design Ethos
 - Open source, self-hostable, paid public hosting.
 - It should feel fun and rewarding, above all else.
