@@ -49,7 +49,7 @@ public class ToDoControllerTests : IDisposable
 
 		// Act
 		var filter = new PlanrTaskRangeFilter();
-		var result = await _controller.GetByWeek(filter, It.IsAny<CancellationToken>());
+		var result = await _controller.Get(filter, It.IsAny<CancellationToken>());
 
 		// Assert
 		Assert.True(result is OkObjectResult);
@@ -72,13 +72,103 @@ public class ToDoControllerTests : IDisposable
 		{
 			WeekDate = DateOnly.FromDateTime(DateTime.Today)
 		};
-		var result = await _controller.GetByWeek(filter, It.IsAny<CancellationToken>());
+		var result = await _controller.Get(filter, It.IsAny<CancellationToken>());
 
 		// Assert
 		Assert.True(result is OkObjectResult);
 		var okResult = Assert.IsType<OkObjectResult>(result);
 		var content = Assert.IsType<List<PlanrTask>>(okResult.Value);
 		Assert.Equal(35, content.Count);
+	}
+
+	[Fact]
+	public async Task Get_Id_Valid()
+	{
+		// Arrange
+		await _context.Database.EnsureDeletedAsync();
+		await _context.Database.EnsureCreatedAsync();
+		var id = Guid.NewGuid();
+		var planrTask = new PlanrTask() { Id = id, Date = DateOnly.FromDateTime(DateTime.Today), Description = "Test Task", IsComplete = false };
+		_context.PlanrTasks.Add(planrTask);
+		await _context.SaveChangesAsync();
+
+		// Act
+		var result = await _controller.Get(id, It.IsAny<CancellationToken>());
+
+		// Assert
+		var okResult = Assert.IsType<OkObjectResult>(result);
+		var content = Assert.IsType<PlanrTask>(okResult.Value);
+		Assert.NotNull(content);
+		Assert.Equal(id, content.Id);
+		Assert.Equal("Test Task", content.Description);
+		Assert.False(content.IsComplete);
+		Assert.Equal(DateOnly.FromDateTime(DateTime.Today), content.Date);
+	}
+
+	[Fact]
+	public async Task Post_Valid()
+	{
+		// Arrange
+		await _context.Database.EnsureDeletedAsync();
+		await _context.Database.EnsureCreatedAsync();
+		await _context.SaveChangesAsync();
+
+		// Act
+		var planrTask = new PlanrTask() { Date = DateOnly.FromDateTime(DateTime.Today), Description = "Test Task" };
+		var result = await _controller.Post(planrTask, It.IsAny<CancellationToken>());
+
+		// Assert
+		Assert.True(result is OkObjectResult);
+		var okResult = Assert.IsType<OkObjectResult>(result);
+		var content = Assert.IsType<PlanrTask>(okResult.Value);
+		Assert.NotNull(content);
+		Assert.Equal("Test Task", content.Description);
+		Assert.Equal(DateOnly.FromDateTime(DateTime.Today), content.Date);
+	}
+
+	[Fact]
+	public async Task Put_Valid()
+	{
+		// Arrange
+		await _context.Database.EnsureDeletedAsync();
+		await _context.Database.EnsureCreatedAsync();
+		var planrTask = new PlanrTask() { Id = Guid.NewGuid(), Date = DateOnly.FromDateTime(DateTime.Today), Description = "Test Task", IsComplete = false };
+		_context.PlanrTasks.Add(planrTask);
+		await _context.SaveChangesAsync();
+
+		// Act
+		planrTask.Description = "Modified";
+		planrTask.IsComplete = true;
+		var result = await _controller.Put(planrTask.Id, planrTask, It.IsAny<CancellationToken>());
+
+		// Assert
+		Assert.True(result is OkObjectResult);
+		var okResult = Assert.IsType<OkObjectResult>(result);
+		var content = Assert.IsType<PlanrTask>(okResult.Value);
+		Assert.NotNull(content);
+		Assert.Equal("Modified", content.Description);
+		Assert.True(content.IsComplete);
+		Assert.Equal(DateOnly.FromDateTime(DateTime.Today), content.Date);
+	}
+
+	[Fact]
+	public async Task Delete_Valid()
+	{
+		// Arrange
+		await _context.Database.EnsureDeletedAsync();
+		await _context.Database.EnsureCreatedAsync();
+		var planrTask = new PlanrTask() { Id = Guid.NewGuid(), Date = DateOnly.FromDateTime(DateTime.Today), Description = "Test Task", IsComplete = false };
+		_context.PlanrTasks.Add(planrTask);
+		await _context.SaveChangesAsync();
+
+		// Act
+		planrTask.Description = "Modified";
+		planrTask.IsComplete = true;
+		var result = await _controller.Delete(planrTask.Id, It.IsAny<CancellationToken>());
+
+		// Assert
+		Assert.True(result is OkResult);
+		Assert.False(_context.PlanrTasks.Any());
 	}
 
 }

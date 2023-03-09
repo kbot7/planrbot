@@ -16,7 +16,7 @@ public partial class ToDoController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> GetByWeek(
+	public async Task<IActionResult> Get(
 		[FromQuery] PlanrTaskRangeFilter criteria,
 		CancellationToken ct)
 	{
@@ -28,13 +28,13 @@ public partial class ToDoController : ControllerBase
 	}
 
 	[HttpGet("{id}")]
-	public Task<PlanrTask> GetById(Guid id, CancellationToken ct)
+	public async Task<IActionResult> Get(Guid id, CancellationToken ct)
 	{
-		return _db.PlanrTasks.SingleAsync(t => t.Id == id, ct);
+		return new OkObjectResult(await _db.PlanrTasks.SingleAsync(t => t.Id == id, ct));
 	}
 
 	[HttpPut("{id}")]
-	public async Task<IActionResult> SaveById([FromRoute]Guid id, [FromBody]PlanrTask item, CancellationToken ct)
+	public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]PlanrTask item, CancellationToken ct)
 	{
 		var exists = await _db.PlanrTasks.AnyAsync(t => t.Id == id, ct);
 		if (!exists) { return NotFound(); }
@@ -46,7 +46,7 @@ public partial class ToDoController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Create([FromBody] PlanrTask item, CancellationToken ct)
+	public async Task<IActionResult> Post([FromBody] PlanrTask item, CancellationToken ct)
 	{
 		item.Id = Guid.NewGuid();
 		_db.PlanrTasks.Add(item);
@@ -55,7 +55,7 @@ public partial class ToDoController : ControllerBase
 	}
 
 	[HttpDelete("{id}")]
-	public async Task<IActionResult> DeleteById(Guid id, CancellationToken ct)
+	public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
 	{
 		var item = await _db.PlanrTasks.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (item != null)
