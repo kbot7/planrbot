@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web.Resource;
-
-using Planrbot.Models;
-using Planrbot.Server.Data;
-
-namespace Planrbot.Web.Server.Controllers;
+﻿namespace Planrbot.Web.Server.Controllers;
 
 //[Authorize]
 [ApiController]
@@ -15,10 +7,10 @@ namespace Planrbot.Web.Server.Controllers;
 public class ToDoController : ControllerBase
 {
 
-	private readonly ILogger<WeatherForecastController> _logger;
+	private readonly ILogger<ToDoController> _logger;
 	private readonly MainDbContext _db;
 
-	public ToDoController(ILogger<WeatherForecastController> logger, MainDbContext db)
+	public ToDoController(ILogger<ToDoController> logger, MainDbContext db)
 	{
 		_logger = logger;
 		_db = db;

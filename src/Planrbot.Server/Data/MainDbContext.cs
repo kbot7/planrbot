@@ -1,16 +1,26 @@
-﻿using System.Reflection.Metadata;
-
-using Microsoft.EntityFrameworkCore;
-
-using Planrbot.Models;
-
-namespace Planrbot.Server.Data;
+﻿namespace Planrbot.Server.Data;
 
 public class MainDbContext : DbContext
 {
-	public MainDbContext(DbContextOptions<MainDbContext> opt) : base(opt)
+	private readonly IWebHostEnvironment _env;
+	private readonly IConfiguration _config;
+	public MainDbContext(DbContextOptions<MainDbContext> opt, IWebHostEnvironment env, IConfiguration config) : base(opt)
 	{
+		_env = env;
+		_config = config;
+	}
 
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		if (_env.IsDevelopment()) 
+		{
+			optionsBuilder.UseInMemoryDatabase("planrbot");
+		} else
+		{
+			optionsBuilder.UseSqlServer(_config.GetConnectionString("Main"));
+		}
+
+		base.OnConfiguring(optionsBuilder);	
 	}
 
 	public DbSet<ToDoItem> ToDoItems { get; set; }

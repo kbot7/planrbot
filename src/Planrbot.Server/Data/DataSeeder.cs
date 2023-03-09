@@ -1,6 +1,4 @@
-﻿using Planrbot.Models;
-
-namespace Planrbot.Server.Data;
+﻿namespace Planrbot.Server.Data;
 
 public class DataSeeder
 {

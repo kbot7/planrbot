@@ -1,11 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
-
-using Planrbot.Server.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,10 +13,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<MainDbContext>(
-		options => options.UseInMemoryDatabase("planrbot"));
-
-//builder.Services.AddDbContext<MainDbContext>(
-//		options => options.UseSqlServer(builder.Configuration.GetConnectionString("Main")));
+		(IServiceProvider svc, DbContextOptionsBuilder options) =>
+		{
+			var env = svc.GetRequiredService<IWebHostEnvironment>();
+			if (env.IsDevelopment())
+			{
+				options.UseInMemoryDatabase("planrbot");
+			} else
+			{
+				options.UseSqlServer(builder.Configuration.GetConnectionString("Main"));
+			}
+		});
 
 var app = builder.Build();
 
