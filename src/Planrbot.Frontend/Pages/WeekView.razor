@@ -1,8 +1,15 @@
 ﻿@inject HttpClient Http
 @inject ILogger<WeekView> Logger
 
-@page "/week"
+@using Fluxor
+@using Planrbot.Frontend.Store.TodoUseCase
+@using Planrbot.Frontend.Store;
 @using Planrbot.Models;
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inject IState<GetWeekState> _todoState
+
+@page "/week"
+
 
 <MudDatePicker @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" />
 
@@ -12,19 +19,24 @@
     <MudButton OnClick="NextWeek">Next Week</MudButton>
 </MudButtonGroup>
 
-@if (todoItems != null && todoItems.Any())
+@if (_todoState.Value.IsLoading)
 {
-    <div style=" overflow-x: auto; width: 100%">
-
-    </div>
-    <MudGrid>
-        @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-        {
-            <MudItem>
-                <DayToDoListCard Day="day" Items="todoItems.Where(t => t.Date.DayOfWeek == day)" />
-            </MudItem>
-        }
-    </MudGrid>
+    <p><em>Loading...</em></p>
+} else
+{
+    @if (_todoState.Value.ToDoItems != null && _todoState.Value.ToDoItems.Any())
+    {
+        <div style=" overflow-x: auto; width: 100%">
+        </div>
+        <MudGrid>
+            @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                <MudItem>
+                    <DayToDoListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Date.DayOfWeek == day)" />
+                </MudItem>
+            }
+        </MudGrid>
+    }
 }
 
 @code {
@@ -43,28 +55,30 @@
         await _picker.GoToDate(DateTime.Today.AddDays(-7));
     }
 
-    private ToDoItem[]? todoItems;
+    [Inject]
+    public IDispatcher? Dispatcher { get; set; }
 
-    private async Task ExecuteQuery()
+    protected override void OnInitialized()
     {
-        try
-        {
-            todoItems = await Http.GetFromJsonAsync<ToDoItem[]>($"api/ToDo?date={WeekDate:s}");
-        }
-        //catch (AccessTokenNotAvailableException exception)
-        //{
-        //    exception.Redirect();
-        //}
-        catch (Exception ex){}
+        WeekDate ??= DateTime.Today;
+        Dispatcher?.Dispatch(new GetWeekAction(WeekDate.Value));
+        base.OnInitialized();
+    }
+
+
+    private void ExecuteQuery()
+    {
+        WeekDate ??= DateTime.Today;
+        Dispatcher?.Dispatch(new GetWeekAction(WeekDate.Value));
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        WeekDate = DateTime.Today;
-        await ExecuteQuery();
-        await base.OnInitializedAsync();
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    //WeekDate = DateTime.Today;
+    //    //await ExecuteQuery();
+    //    await base.OnInitializedAsync();
+    //}
 
     public DateTime? WeekDate
     {

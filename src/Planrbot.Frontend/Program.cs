@@ -1,10 +1,3 @@
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MudBlazor.Services;
-
-using Planrbot.Frontend;
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -16,6 +9,13 @@ builder.Services.AddHttpClient("Planrbot.Web.ServerAPI", client => client.BaseAd
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Planrbot.Web.ServerAPI"));
 
 builder.Services.AddMudServices();
+
+builder.Services.AddFluxor(opt =>
+{
+	opt.ScanAssemblies(typeof(Program).Assembly);
+	opt.UseRouting();
+	opt.UseReduxDevTools();
+});
 
 //builder.Services.AddMsalAuthentication(options =>
 //{
