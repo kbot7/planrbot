@@ -36,8 +36,6 @@ else
 
 builder.Services.Configure<JsonOptions>(options =>
 {
-	options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
-	options.JsonSerializerOptions.PropertyNamingPolicy = null;
 	options.JsonSerializerOptions.WriteIndented = builder.Environment.IsDevelopment();
 	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
