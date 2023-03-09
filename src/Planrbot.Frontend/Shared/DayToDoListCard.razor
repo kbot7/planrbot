@@ -22,12 +22,12 @@
     public DayOfWeek Day { get; set; }
 
     [Parameter]
-    public IEnumerable<ToDoItem> Items { get; set; }
+    public IEnumerable<PlanrTask> Items { get; set; }
 
-    private async Task ItemChanged(ToDoItem item)
+    private async Task ItemChanged(PlanrTask item)
     {
         Logger.LogInformation("Item Changed | Item: {0}", item);
-        var response = await Http.PutAsJsonAsync<ToDoItem>($"api/ToDo/{item.Id}", item);
+        var response = await Http.PutAsJsonAsync<PlanrTask>($"api/ToDo/{item.Id}", item);
         Logger.LogInformation("Item Saved Response | Response: {0}", response);
     }
 }

@@ -11,7 +11,7 @@
 @page "/week"
 
 
-<MudDatePicker @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" />
+<MudDatePicker @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" StartMonth="DateTime.Today" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" />
 
 <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
     <MudButton OnClick="LastWeek">Last Week</MudButton>
@@ -60,25 +60,16 @@
 
     protected override void OnInitialized()
     {
-        WeekDate ??= DateTime.Today;
-        Dispatcher?.Dispatch(new GetWeekAction(WeekDate.Value));
+        Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
         base.OnInitialized();
     }
-
 
     private void ExecuteQuery()
     {
         WeekDate ??= DateTime.Today;
-        Dispatcher?.Dispatch(new GetWeekAction(WeekDate.Value));
+        Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
         StateHasChanged();
     }
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    //WeekDate = DateTime.Today;
-    //    //await ExecuteQuery();
-    //    await base.OnInitializedAsync();
-    //}
 
     public DateTime? WeekDate
     {
@@ -92,6 +83,6 @@
             }
         }
     }
-    private DateTime _weekDate;
+    private DateTime _weekDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
 }

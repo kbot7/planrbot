@@ -26,14 +26,14 @@ public class DataSeeder
 		"Pickup office"
 	};
 
-	private List<ToDoItem> GenerateToDoItems()
+	private List<PlanrTask> GenerateToDoItems()
 	{
-		var items = new List<ToDoItem>();
+		var items = new List<PlanrTask>();
 		for (int d = -365; d < 365; d++)
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				items.Add(new ToDoItem() { Date = DateTime.Today.AddDays(d), IsComplete = Random.Shared.Next(2) == 0, Description = _exampleTasks[Random.Shared.Next(_exampleTasks.Length)] });
+				items.Add(new PlanrTask() { Date = DateOnly.FromDateTime(DateTime.Today.AddDays(d)), IsComplete = Random.Shared.Next(2) == 0, Description = _exampleTasks[Random.Shared.Next(_exampleTasks.Length)] });
 			}
 		}
 		return items;
@@ -41,7 +41,7 @@ public class DataSeeder
 
 	public async Task SeedAsync()
 	{
-		await _db.ToDoItems.AddRangeAsync(GenerateToDoItems());
+		await _db.PlanrTasks.AddRangeAsync(GenerateToDoItems());
 		await _db.SaveChangesAsync();
 	}
 }

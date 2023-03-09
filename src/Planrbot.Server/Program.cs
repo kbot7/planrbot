@@ -1,3 +1,7 @@
+using System.Text.Json.Serialization;
+
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,45 +14,65 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<MainDbContext>(
-		(IServiceProvider svc, DbContextOptionsBuilder options) =>
-		{
-			var env = svc.GetRequiredService<IWebHostEnvironment>();
-			if (env.IsDevelopment())
-			{
-				options.UseInMemoryDatabase("planrbot");
-			} else
-			{
-				options.UseSqlServer(builder.Configuration.GetConnectionString("Main"));
-			}
-		});
+builder.Services.AddSwaggerGen(opt =>
+{
+	opt.MapType<DateOnly>(() => new OpenApiSchema
+	{
+		Type = "string",
+		Format = "date"
+	});
+});
+
+
+if (builder.Environment.IsProduction())
+{
+	builder.Services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Main")));
+}
+else
+{
+	builder.Services.AddDbContext<MainDbContext>(opt => opt.UseInMemoryDatabase("planr"));
+}
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+	options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+	options.JsonSerializerOptions.PropertyNamingPolicy = null;
+	options.JsonSerializerOptions.WriteIndented = builder.Environment.IsDevelopment();
+	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+
+
+//builder.Services.AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 
 var app = builder.Build();
 
-// Migrate db
+// Seed dev DB
 if (app.Environment.IsDevelopment())
 {
 	using (var scope = app.Services.CreateScope())
 	{
 		var db = scope.ServiceProvider.GetRequiredService<MainDbContext>();
-		//await db.Database.EnsureDeletedAsync();
-		//await db.Database.MigrateAsync();
 		var seeder = new DataSeeder(db);
 		await seeder.SeedAsync();
 	}
 }
 
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+bool swaggerEnabled = app.Configuration.GetValue<bool>("PLANRBOT_SWAGGER_ENABLED") || app.Environment.IsDevelopment();
+if (swaggerEnabled)
 {
-	app.UseWebAssemblyDebugging();
 	app.UseSwagger();
+}
+
+bool swaggerUIEnabled = (app.Configuration.GetValue<bool>("PLANRBOT_SWAGGER_UI_ENABLED") && swaggerEnabled) || app.Environment.IsDevelopment();
+if (swaggerUIEnabled)
+{
 	app.UseSwaggerUI();
 }
-else
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Error");
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -57,7 +81,13 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseBlazorFrameworkFiles();
+bool blazorEnabled = app.Configuration.GetValue<bool>("PLANRBOT_BLAZOR_ENABLED");
+if (blazorEnabled)
+{
+	app.UseWebAssemblyDebugging();
+	app.UseBlazorFrameworkFiles();
+}
+
 app.UseStaticFiles();
 
 app.UseRouting();

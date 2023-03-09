@@ -3,11 +3,11 @@
 public static class Reducers
 {
 	[ReducerMethod]
-	public static GetWeekState ReduceGetWeekAction(GetWeekState state, GetWeekAction action) =>
-		new(true, Array.Empty<ToDoItem>(), action.Week);
+	public static GetWeekState ReduceGetWeekAction(GetWeekState state, GetTasksByWeek action) =>
+		new(true, Array.Empty<PlanrTask>(), action.Week);
 
 	[ReducerMethod]
-	public static GetWeekState ReduceGetWeekResultAction(GetWeekState state, GetWeekResultAction action)
+	public static GetWeekState ReduceGetWeekResultAction(GetWeekState state, GetTasksSuccess action)
 	{
 		return state with
 		{

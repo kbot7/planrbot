@@ -24,4 +24,4 @@
 //}
 
 //[FeatureState]
-public record GetWeekState(bool IsLoading, ToDoItem[] ToDoItems, DateTime Week);
+public record GetWeekState(bool IsLoading, PlanrTask[] ToDoItems, DateTime Week);
