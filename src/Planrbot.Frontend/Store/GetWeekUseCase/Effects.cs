@@ -1,6 +1,8 @@
-﻿namespace Planrbot.Frontend.Store.TodoUseCase;
+﻿using static MudBlazor.CategoryTypes;
 
-public class GetWeekHttpEffect : Effect<GetTasksByWeek>
+namespace Planrbot.Frontend.Store.TodoUseCase;
+
+public class GetWeekHttpEffect // : Effect<GetTasksByWeek>
 {
 	private readonly IHttpClientFactory _httpFactory;
 
@@ -9,12 +11,14 @@ public class GetWeekHttpEffect : Effect<GetTasksByWeek>
 		_httpFactory = httpFactory;
 	}
 
-	public override async Task HandleAsync(GetTasksByWeek action, IDispatcher dispatcher)
+	[EffectMethod]
+	public async Task HandleGetTasksByWeekAsync(GetTasksByWeek action, IDispatcher dispatcher)
+	//public override async Task HandleAsync(GetTasksByWeek action, IDispatcher dispatcher)
 	{
 		try
 		{
 			var http = _httpFactory.CreateClient("Planrbot.Web.ServerAPI");
-			var items = await http.GetFromJsonAsync<PlanrTask[]>($"api/ToDo?date={action.Week:yyyy-MM-dd}");
+			var items = await http.GetFromJsonAsync<PlanrTask[]>($"api/ToDo?weekDate={action.Week:yyyy-MM-dd}");
 			dispatcher.Dispatch(new GetTasksSuccess(items ?? Array.Empty<PlanrTask>(), action.Week));
 		}
 		//catch (AccessTokenNotAvailableException exception)
@@ -24,6 +28,28 @@ public class GetWeekHttpEffect : Effect<GetTasksByWeek>
 		catch (Exception ex)
 		{
 			dispatcher.Dispatch(new GetTasksError(ex.Message));
+			throw;
+		}
+	}
+
+	[EffectMethod]
+	public async Task HandleUpdateTaskAsync(UpdateTask action, IDispatcher dispatcher)
+	{
+		var http = _httpFactory.CreateClient("Planrbot.Web.ServerAPI");
+		try
+		{
+			var result = await http.PutAsJsonAsync<PlanrTask>($"api/ToDo/{action.Item.Id}", action.Item);
+			var item = await result.Content.ReadFromJsonAsync<PlanrTask>();
+			var resultAction = new UpdateTaskResult(item);
+			dispatcher.Dispatch(resultAction);
+		}
+		//catch (AccessTokenNotAvailableException exception)
+		//{
+		//    exception.Redirect();
+		//}
+		catch (Exception ex)
+		{
+			dispatcher.Dispatch(new UpdateTaskError(ex.Message));
 			throw;
 		}
 	}

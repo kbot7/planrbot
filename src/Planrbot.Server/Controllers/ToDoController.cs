@@ -1,11 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Planrbot.Web.Server.Controllers;
+﻿namespace Planrbot.Web.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -74,73 +67,6 @@ public partial class ToDoController : ControllerBase
 		else
 		{
 			return NotFound();
-		}
-	}
-}
-public class PlanrTaskRangeFilter : IValidatableObject
-{
-	[FromQuery(Name = "Date")]
-	public DateOnly? WeekDate { get; init; }
-	[FromQuery(Name = "From")]
-	public DateOnly? From { get; init; }
-	[FromQuery(Name = "To")]
-	public DateOnly? To { get; init; }
-	[FromQuery(Name = "FirstDayOfWeek")]
-	public DayOfWeek? FirstDayOfWeek { get; init; } = DayOfWeek.Sunday;
-	[BindNever]
-	public DateOnly? StartOfWeekDate
-	{
-		get
-		{
-			if (WeekDate == null || FirstDayOfWeek == null) return null;
-			var daysSinceStartOfWeek = (int)WeekDate.Value.DayOfWeek - (int)FirstDayOfWeek.Value;
-			if (daysSinceStartOfWeek < 0)
-			{
-				daysSinceStartOfWeek += 7;
-			}
-			return WeekDate.Value.AddDays(daysSinceStartOfWeek * -1);
-		}
-	}
-
-	public (DateOnly From, DateOnly To) ToDateTuple()
-	{
-		DateOnly start;
-		DateOnly end;
-		if (From.HasValue && To.HasValue)
-		{
-			start = From.Value;
-			end = To.Value;
-		}
-		else if (StartOfWeekDate.HasValue)
-		{
-			start = StartOfWeekDate.Value;
-			end = StartOfWeekDate.Value.AddDays(6);
-		}
-		else
-		{
-			var startWeek = new PlanrTaskRangeFilter
-			{
-				WeekDate = DateOnly.FromDateTime(DateTime.Today)
-			}.StartOfWeekDate;
-			start = startWeek.Value;
-			end = startWeek.Value.AddDays(6);
-		}
-		return (start, end);
-	}
-
-	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-	{
-		if (From.HasValue && !To.HasValue)
-		{
-			yield return new ValidationResult(
-				"'To' parameter is required when 'From' is used",
-				new[] { nameof(To) });
-		}
-		if (To.HasValue && !From.HasValue)
-		{
-			yield return new ValidationResult(
-				"'From' parameter is required when 'To' is used",
-				new[] { nameof(From) });
 		}
 	}
 }

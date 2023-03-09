@@ -1,7 +1,9 @@
-﻿namespace Planrbot.Frontend.Store.TodoUseCase;
+﻿using System.Collections.Immutable;
+
+namespace Planrbot.Frontend.Store.TodoUseCase;
 
 public class Feature : Feature<GetWeekState>
 {
 	public override string GetName() => "GetWeek";
-	protected override GetWeekState GetInitialState() => new(true, Array.Empty<PlanrTask>(), DateTime.Today);
+	protected override GetWeekState GetInitialState() => new(true, ImmutableDictionary<Guid, PlanrTask>.Empty, DateTime.Today);
 }

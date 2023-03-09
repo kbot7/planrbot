@@ -1,5 +1,6 @@
 ﻿@inject HttpClient Http
 @inject ILogger<DayToDoListCard> Logger
+@using Planrbot.Frontend.Store;
 @using Planrbot.Models;
 
 <MudCard>
@@ -24,10 +25,14 @@
     [Parameter]
     public IEnumerable<PlanrTask> Items { get; set; }
 
-    private async Task ItemChanged(PlanrTask item)
+    [Inject]
+    public IDispatcher? Dispatcher { get; set; }
+
+    private Task ItemChanged(PlanrTask item)
     {
         Logger.LogInformation("Item Changed | Item: {0}", item);
-        var response = await Http.PutAsJsonAsync<PlanrTask>($"api/ToDo/{item.Id}", item);
-        Logger.LogInformation("Item Saved Response | Response: {0}", response);
+        var updateAction = new UpdateTask(item);
+        Dispatcher?.Dispatch(updateAction);
+        return Task.CompletedTask;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Planrbot.Frontend.Store.TodoUseCase;
+﻿using System.Collections.Immutable;
+
+namespace Planrbot.Frontend.Store.TodoUseCase;
 
 //[FeatureState]
 //public class ToDoState
@@ -24,4 +26,4 @@
 //}
 
 //[FeatureState]
-public record GetWeekState(bool IsLoading, PlanrTask[] ToDoItems, DateTime Week);
+public record GetWeekState(bool IsLoading, IDictionary<Guid, PlanrTask> ToDoItems, DateTime Week);
