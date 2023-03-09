@@ -27,7 +27,7 @@
     private async Task ItemChanged(ToDoItem item)
     {
         Logger.LogInformation("Item Changed | Item: {0}", item);
-        var response = await Http.PostAsJsonAsync<ToDoItem>($"api/ToDo/{item.Id}", item);
+        var response = await Http.PutAsJsonAsync<ToDoItem>($"api/ToDo/{item.Id}", item);
         Logger.LogInformation("Item Saved Response | Response: {0}", response);
     }
 }

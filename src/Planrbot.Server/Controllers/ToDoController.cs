@@ -17,7 +17,7 @@ public class ToDoController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<IEnumerable<ToDoItem>> GetByWeek(DateTime date = default)
+	public async Task<IEnumerable<ToDoItem>> GetByWeek(CancellationToken ct, DateTime date = default)
 	{
 		if (date == default)
 		{
@@ -28,21 +28,51 @@ public class ToDoController : ControllerBase
 
 		var firstSunday = date.AddDays(daysAfterSunday);
 
-		var items = await _db.ToDoItems.Where(t => t.Date >= firstSunday && t.Date <= firstSunday.AddDays(6)).OrderBy(t => t.Date).ToListAsync();
+		var items = await _db.ToDoItems.Where(t => t.Date >= firstSunday && t.Date <= firstSunday.AddDays(6)).OrderBy(t => t.Date).ToListAsync(ct);
 
 		return items;
 	}
 
 	[HttpGet("{id}")]
-	public Task<ToDoItem> GetById(Guid id)
+	public Task<ToDoItem> GetById(Guid id, CancellationToken ct)
 	{
-		return _db.ToDoItems.SingleAsync(t => t.Id == id);
+		return _db.ToDoItems.SingleAsync(t => t.Id == id, ct);
 	}
 
-	[HttpPost("{id}")]
-	public async Task SaveById([FromRoute]Guid id, [FromBody]ToDoItem item)
+	[HttpPut("{id}")]
+	public async Task<IActionResult> SaveById([FromRoute]Guid id, [FromBody]ToDoItem item, CancellationToken ct)
 	{
+		var exists = await _db.ToDoItems.AnyAsync(t => t.Id == id, ct);
+		if (!exists) { return NotFound(); }
+		if (item.Id != id) { return BadRequest(); }
+
 		_db.Update(item);
-		await _db.SaveChangesAsync();
+		await _db.SaveChangesAsync(ct);
+		return new OkObjectResult(item);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Create([FromBody] ToDoItem item, CancellationToken ct)
+	{
+		item.Id = Guid.NewGuid();
+		_db.ToDoItems.Add(item);
+		await _db.SaveChangesAsync(ct);
+		return new OkObjectResult(item);
+	}
+
+	[HttpDelete("{id}")]
+	public async Task<IActionResult> DeleteById(Guid id, CancellationToken ct)
+	{
+		var item = await _db.ToDoItems.FirstOrDefaultAsync(t => t.Id == id, ct);
+		if (item != null)
+		{
+			_db.ToDoItems.Remove(item);
+			await _db.SaveChangesAsync(ct);
+			return Ok();
+		}
+		else
+		{
+			return NotFound();
+		}
 	}
 }
