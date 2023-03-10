@@ -5,16 +5,16 @@ A personal planner app
 
 # To Do
 ### Blazor
-[ ] Implement delete in DayListCard
-[ ] Add dropzone support to DayListCard [https://mudblazor.com/components/dropzone#api](see here)
-[ ] Implement basic create in DayListCard
-[ ] Add autocomplete to DayListCard [https://mudblazor.com/components/autocomplete#api](see here)
+- [ ] Implement delete in DayListCard
+- [ ] Add dropzone support to DayListCard [https://mudblazor.com/components/dropzone#api](see here)
+- [ ] Implement basic create in DayListCard
+-[ ] Add autocomplete to DayListCard [https://mudblazor.com/components/autocomplete#api](see here)
 ### Server
-[ ] Setup OAuth plumbing to work with any OAuth provier (like Apple, Google, Microsoft, or Discord)
-[ ] 
+- [ ] Setup OAuth plumbing to work with any OAuth provier (like Apple, Google, Microsoft, or Discord)
+- [ ] Setup SignalR hub
 ### Other Apps
-[ ] Setup Blazor MAUI Project
-[ ] Setup TVOS project on mac
+- [ ] Setup Blazor MAUI Project
+- [ ] Setup TVOS project on mac
 
 # Developer Setup
 - Install the .NET 7.0.201 SDK [https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.201-windows-x64-installer](here)
