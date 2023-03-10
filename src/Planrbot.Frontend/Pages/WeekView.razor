@@ -11,20 +11,7 @@
 @page "/"
 @page "/week"
 
-
-
 <MudGrid Spacing="2" Justify="Justify.Center">
-    <MudItem xs="6" sm="3" md="4">
-        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">
-            <MudIconButton OnClick="LastWeek" Icon="@Icons.Material.Filled.ArrowLeft" aria-label="last"></MudIconButton>
-            <MudIconButton OnClick="ThisWeek" Icon="@Icons.Material.Filled.Today" aria-label="this"></MudIconButton>
-            <MudIconButton OnClick="NextWeek" Icon="@Icons.Material.Filled.ArrowRight" aria-label="next"></MudIconButton>
-        </MudButtonGroup>
-    </MudItem>
-    <MudItem xs="6" sm="3" md="4">
-         <MudDatePicker Size="Size.Small" @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" StartMonth="DateTime.Today" Label="Week" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" DateFormat="yyyy-MM-dd" />
-     </MudItem>
-
     @if (_todoState.Value.IsLoading)
     {
         <p><em>Loading...</em></p>
@@ -32,8 +19,6 @@
     {
         @if (_todoState.Value.ToDoItems != null && _todoState.Value.ToDoItems.Any())
         {
-            <div style=" overflow-x: auto; width: 100%">
-            </div>
                 @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
                 {
                     <MudItem>
@@ -45,49 +30,5 @@
 </MudGrid>
 
 @code {
-
-    MudDatePicker _picker;
-    private async Task ThisWeek()
-    {
-        await _picker.GoToDate(DateTime.Today);
-    }
-    private async Task NextWeek()
-    {
-        await _picker.GoToDate(DateTime.Today.AddDays(7));
-    }
-    private async Task LastWeek()
-    {
-        await _picker.GoToDate(DateTime.Today.AddDays(-7));
-    }
-
-    [Inject]
-    public IDispatcher? Dispatcher { get; set; }
-
-    protected override void OnInitialized()
-    {
-        Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
-        base.OnInitialized();
-    }
-
-    private void ExecuteQuery()
-    {
-        WeekDate ??= DateTime.Today;
-        Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
-        StateHasChanged();
-    }
-
-    public DateTime? WeekDate
-    {
-        get => _weekDate;
-        set
-        {
-            if (value != null)
-            {
-                var date = (DateTime)value;
-                _weekDate = date.AddDays(-(int)date.DayOfWeek);
-            }
-        }
-    }
-    private DateTime _weekDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
 }

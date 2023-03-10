@@ -1,0 +1,56 @@
+﻿@using Planrbot.Frontend.Store;
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<div class="d-flex align-center">
+    <MudButtonGroup Class="d-flex px-4" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small" Edge="Edge.Start">
+        <MudIconButton OnClick="@(() => PrevWeek())" Icon="@Icons.Material.Filled.ArrowLeft" aria-label="last"></MudIconButton>
+        <MudIconButton OnClick="@(() => _picker.Open())" Icon="@Icons.Material.Filled.Today" aria-label="this"></MudIconButton>
+        <MudIconButton OnClick="@(() => NextWeek())" Icon="@Icons.Material.Filled.ArrowRight" aria-label="next"></MudIconButton>
+    </MudButtonGroup>
+    <MudDatePicker style="display:none;" @ref="_picker" @bind-Date="WeekDate" @bind-Date:after="ExecuteQuery" Class="d-flex px-4" DisableToolbar="true" PickerVariant="PickerVariant.Dialog" DateFormat="yyyy-MM-dd" />
+</div>
+
+@code {
+    MudDatePicker _picker;
+    private async Task NextWeek()
+    {
+        WeekDate = WeekDate.Value.AddDays(7);
+        await _picker.GoToDate(WeekDate.Value);
+    }
+    private async Task PrevWeek()
+    {
+        WeekDate = WeekDate.Value.AddDays(-7);
+        await _picker.GoToDate(WeekDate.Value);
+    }
+
+    public DateTime? WeekDate
+    {
+        get => _weekDate;
+        set
+        {
+            if (value != null)
+            {
+                var date = (DateTime)value;
+                _weekDate = date.AddDays(-(int)date.DayOfWeek);
+            }
+        }
+    }
+    private DateTime _weekDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+
+    [Inject]
+    public IDispatcher? Dispatcher { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
+        await _picker.GoToDate(WeekDate.Value);
+        await base.OnInitializedAsync();
+    }
+
+    private void ExecuteQuery()
+    {
+        WeekDate ??= DateTime.Today;
+        Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
+        StateHasChanged();
+    }
+}

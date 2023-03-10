@@ -10,7 +10,7 @@
     <MudCardContent>
         @foreach (var item in Items.Where(t => t.Date.DayOfWeek == Day))
         {
-            <MudCheckBox @bind-Checked="@item.IsComplete" @bind-Checked:after="() => ItemChanged(item)" Label="@item.Description" Color="Color.Primary" />
+            <MudCheckBox @bind-Checked="@item.IsComplete" @bind-Checked:after="() => ItemChanged(item)" Label="@item.Description" Color="Color.Primary"></MudCheckBox>
         }
     </MudCardContent>
     <MudCardActions>

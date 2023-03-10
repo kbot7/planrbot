@@ -6,24 +6,13 @@
 
 <MudLayout>
     <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <WeekButtonGroup />
         <MudSpacer />
         <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank" />
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
-        @*<MudMenu StartIcon="@Icons.Material.Filled.Style" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Label="Style" Color="Color.Secondary" Variant="Variant.Filled">
-            <MudMenuItem>Blue</MudMenuItem>
-            <MudMenuItem>Dark</MudMenuItem>
-        </MudMenu>*@
         <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
         <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Dark Mode" />
-
     </MudAppBar>
-    @*<MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Top" Elevation="1" Variant="@DrawerVariant.Temporary">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Planr</MudText>
-        </MudDrawerHeader>
-        <NavMenu />
-    </MudDrawer>*@
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
             @Body
@@ -32,12 +21,7 @@
 </MudLayout>
 
 @code {
-    bool _drawerOpen = false;
+    
     private MudTheme _theme = new();
-    private bool _isDarkMode;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
+    private bool _isDarkMode = true;
 }
