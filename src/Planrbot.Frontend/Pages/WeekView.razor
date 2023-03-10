@@ -19,12 +19,12 @@
     {
         @if (_todoState.Value.ToDoItems != null && _todoState.Value.ToDoItems.Any())
         {
-                @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-                {
-                    <MudItem>
-                        <DayToDoListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Value.Date.DayOfWeek == day).Select(t => t.Value)" />
-                    </MudItem>
-                }
+            @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                <MudItem>
+                    <DayToDoListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Value.Date.DayOfWeek == day).Select(t => t.Value)" />
+                </MudItem>
+            }
         }
     }
 </MudGrid>

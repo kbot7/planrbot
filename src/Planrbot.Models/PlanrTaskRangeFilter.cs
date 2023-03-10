@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using Planrbot.Common;
 
 public record PlanrTaskRangeFilter : IValidatableObject
@@ -12,11 +13,11 @@ public record PlanrTaskRangeFilter : IValidatableObject
 	{
 		DateOnly start;
 		DateOnly end;
-		if (Date.HasValue) 
+		if (Date.HasValue)
 		{
 			start = Date.Value;
 			end = Date.Value;
-		} 
+		}
 		else if (From.HasValue && To.HasValue)
 		{
 			start = From.Value;

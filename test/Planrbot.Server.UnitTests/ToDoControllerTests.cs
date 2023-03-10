@@ -22,7 +22,7 @@ public class ToDoControllerTests : IDisposable
 
 	private static List<PlanrTask> GetSeedData(int days, int tasksPerDay = 5)
 	{
-		decimal half = (decimal)days/2;
+		decimal half = (decimal)days / 2;
 		int startDay = 0 - (int)Math.Floor(half);
 		int endDay = 0 + (int)Math.Ceiling(half);
 		endDay = endDay == 0 ? 1 : endDay;

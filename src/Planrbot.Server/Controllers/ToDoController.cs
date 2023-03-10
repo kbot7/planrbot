@@ -34,7 +34,7 @@ public partial class ToDoController : ControllerBase
 	}
 
 	[HttpPut("{id}")]
-	public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]PlanrTask item, CancellationToken ct)
+	public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] PlanrTask item, CancellationToken ct)
 	{
 		var exists = await _db.PlanrTasks.AnyAsync(t => t.Id == id, ct);
 		if (!exists) { return NotFound(); }
