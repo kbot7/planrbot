@@ -1,3 +1,5 @@
+using MudBlazor;
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -11,6 +13,15 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddMudServices(options =>
 {
 	options.PopoverOptions.ThrowOnDuplicateProvider = false;
+
+	options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+	options.SnackbarConfiguration.PreventDuplicates = false;
+	options.SnackbarConfiguration.NewestOnTop = false;
+	options.SnackbarConfiguration.ShowCloseIcon = true;
+	options.SnackbarConfiguration.VisibleStateDuration = 10000;
+	options.SnackbarConfiguration.HideTransitionDuration = 500;
+	options.SnackbarConfiguration.ShowTransitionDuration = 500;
+	options.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
 
 builder.Services.AddFluxor(opt =>

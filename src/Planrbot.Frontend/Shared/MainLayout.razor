@@ -20,7 +20,31 @@
 </MudLayout>
 
 @code {
-    
-    private MudTheme _theme = new();
     private bool _isDarkMode = true;
+
+    MudTheme _theme = new MudTheme()
+        {
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" }
+                }
+            },
+            //Palette = new Palette()
+            //{
+            //    Primary = Colors.Blue.Default,
+            //    Secondary = Colors.Green.Accent4,
+            //    AppbarBackground = Colors.Red.Default,
+            //},
+            //PaletteDark = new PaletteDark()
+            //{
+            //    Primary = Colors.Blue.Lighten1
+            //},
+            //LayoutProperties = new LayoutProperties()
+            //{
+            //    DrawerWidthLeft = "260px",
+            //    DrawerWidthRight = "300px"
+            //}
+        };
 }

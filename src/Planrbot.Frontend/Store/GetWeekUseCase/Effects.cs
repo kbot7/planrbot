@@ -1,14 +1,18 @@
-﻿using static MudBlazor.CategoryTypes;
+﻿using MudBlazor;
+
+using static MudBlazor.CategoryTypes;
 
 namespace Planrbot.Frontend.Store.TodoUseCase;
 
 public class GetWeekHttpEffect // : Effect<GetTasksByWeek>
 {
 	private readonly IHttpClientFactory _httpFactory;
+	private readonly ISnackbar _snackbar;
 
-	public GetWeekHttpEffect(IHttpClientFactory httpFactory)
+	public GetWeekHttpEffect(IHttpClientFactory httpFactory, ISnackbar snackbar)
 	{
 		_httpFactory = httpFactory;
+		_snackbar = snackbar;
 	}
 
 	[EffectMethod]
@@ -52,6 +56,13 @@ public class GetWeekHttpEffect // : Effect<GetTasksByWeek>
 			dispatcher.Dispatch(new UpdateTaskError(ex.Message));
 			throw;
 		}
+	}
+
+	[EffectMethod]
+	public async Task HandleUpdateTaskAsync(UpdateTaskResult action, IDispatcher dispatcher)
+	{
+		_snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+		_snackbar.Add("Update task successful");
 	}
 }
 
