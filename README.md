@@ -6,9 +6,9 @@ A personal planner app
 # To Do
 ### Blazor
 - [ ] Implement delete in DayListCard
-- [ ] Add dropzone support to DayListCard [https://mudblazor.com/components/dropzone#api](see here)
+- [ ] Add dropzone support to DayListCard [see here](https://mudblazor.com/components/dropzone#api)
 - [ ] Implement basic create in DayListCard
--[ ] Add autocomplete to DayListCard [https://mudblazor.com/components/autocomplete#api](see here)
+- [ ] Add autocomplete to DayListCard [see here](https://mudblazor.com/components/autocomplete#api)
 ### Server
 - [ ] Setup OAuth plumbing to work with any OAuth provier (like Apple, Google, Microsoft, or Discord)
 - [ ] Setup SignalR hub
