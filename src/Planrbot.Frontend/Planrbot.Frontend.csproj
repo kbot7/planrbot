@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Planrbot.Common\Planrbot.Common.csproj" />
 		<ProjectReference Include="..\Planrbot.Models\Planrbot.Models.csproj" />
 	</ItemGroup>
 

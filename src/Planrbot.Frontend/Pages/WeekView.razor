@@ -12,33 +12,37 @@
 @page "/week"
 
 
-<MudDatePicker @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" StartMonth="DateTime.Today" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" />
 
-<MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
-    <MudButton OnClick="LastWeek">Last Week</MudButton>
-    <MudButton OnClick="ThisWeek">This Week</MudButton>
-    <MudButton OnClick="NextWeek">Next Week</MudButton>
-</MudButtonGroup>
+<MudGrid Spacing="2" Justify="Justify.Center">
+    <MudItem xs="6" sm="3" md="4">
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">
+            <MudIconButton OnClick="LastWeek" Icon="@Icons.Material.Filled.ArrowLeft" aria-label="last"></MudIconButton>
+            <MudIconButton OnClick="ThisWeek" Icon="@Icons.Material.Filled.Today" aria-label="this"></MudIconButton>
+            <MudIconButton OnClick="NextWeek" Icon="@Icons.Material.Filled.ArrowRight" aria-label="next"></MudIconButton>
+        </MudButtonGroup>
+    </MudItem>
+    <MudItem xs="6" sm="3" md="4">
+         <MudDatePicker Size="Size.Small" @ref="_picker" @bind-Date=WeekDate @bind-Date:after="ExecuteQuery" StartMonth="DateTime.Today" Label="Week" ShowWeekNumbers="true" PickerVariant="PickerVariant.Dialog" DateFormat="yyyy-MM-dd" />
+     </MudItem>
 
-@if (_todoState.Value.IsLoading)
-{
-    <p><em>Loading...</em></p>
-} else
-{
-    @if (_todoState.Value.ToDoItems != null && _todoState.Value.ToDoItems.Any())
+    @if (_todoState.Value.IsLoading)
     {
-        <div style=" overflow-x: auto; width: 100%">
-        </div>
-        <MudGrid>
-            @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                <MudItem>
-                    <DayToDoListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Value.Date.DayOfWeek == day).Select(t => t.Value)" />
-                </MudItem>
-            }
-        </MudGrid>
+        <p><em>Loading...</em></p>
+    } else
+    {
+        @if (_todoState.Value.ToDoItems != null && _todoState.Value.ToDoItems.Any())
+        {
+            <div style=" overflow-x: auto; width: 100%">
+            </div>
+                @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                {
+                    <MudItem>
+                        <DayToDoListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Value.Date.DayOfWeek == day).Select(t => t.Value)" />
+                    </MudItem>
+                }
+        }
     }
-}
+</MudGrid>
 
 @code {
 

@@ -1,3 +1,5 @@
+using Planrbot.Common;
+
 namespace Planrbot.Server.UnitTests;
 
 public class PlanrTaskFilterTests
@@ -10,8 +12,8 @@ public class PlanrTaskFilterTests
 			FirstDayOfWeek = DayOfWeek.Thursday,
 			WeekDate = DateOnly.FromDateTime(DateTime.Parse("2023-03-10"))
 		};
-
-		Assert.True(filter.StartOfWeekDate.Value == DateOnly.FromDateTime(DateTime.Parse("2023-03-09")));
+		var date = DateHelpers.GetFirstDayOfWeek(filter.WeekDate.Value, filter.FirstDayOfWeek.Value);
+		Assert.True(date == DateOnly.FromDateTime(DateTime.Parse("2023-03-09")));
 	}
 
 	[Fact]
@@ -22,8 +24,8 @@ public class PlanrTaskFilterTests
 			FirstDayOfWeek = DayOfWeek.Thursday,
 			WeekDate = DateOnly.FromDateTime(DateTime.Parse("2023-03-06"))
 		};
-
-		Assert.True(filter.StartOfWeekDate.Value == DateOnly.FromDateTime(DateTime.Parse("2023-03-02")));
+		var date = DateHelpers.GetFirstDayOfWeek(filter.WeekDate.Value, filter.FirstDayOfWeek.Value);
+		Assert.True(date == DateOnly.FromDateTime(DateTime.Parse("2023-03-02")));
 	}
 
 	[Fact]

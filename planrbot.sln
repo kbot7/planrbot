@@ -16,7 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Planrbot.Server", "src\Plan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Planrbot.Frontend", "src\Planrbot.Frontend\Planrbot.Frontend.csproj", "{DC0B600F-B246-48F3-A60B-8FCD7083C0E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planrbot.Server.UnitTests", "test\Planrbot.Server.UnitTests\Planrbot.Server.UnitTests.csproj", "{F83BA794-A3E5-41DE-B9F1-DAF2768F082B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Planrbot.Server.UnitTests", "test\Planrbot.Server.UnitTests\Planrbot.Server.UnitTests.csproj", "{F83BA794-A3E5-41DE-B9F1-DAF2768F082B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planrbot.Common", "src\Planrbot.Common\Planrbot.Common.csproj", "{B0FE1CA0-1B1B-4EF1-BB04-DF2FC437AEDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{F83BA794-A3E5-41DE-B9F1-DAF2768F082B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F83BA794-A3E5-41DE-B9F1-DAF2768F082B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F83BA794-A3E5-41DE-B9F1-DAF2768F082B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0FE1CA0-1B1B-4EF1-BB04-DF2FC437AEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FE1CA0-1B1B-4EF1-BB04-DF2FC437AEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FE1CA0-1B1B-4EF1-BB04-DF2FC437AEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0FE1CA0-1B1B-4EF1-BB04-DF2FC437AEDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

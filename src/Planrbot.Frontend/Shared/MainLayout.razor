@@ -18,19 +18,16 @@
         <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Dark Mode" />
 
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Top" Elevation="1" Variant="@DrawerVariant.Temporary">
+    @*<MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Top" Elevation="1" Variant="@DrawerVariant.Temporary">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">Planr</MudText>
         </MudDrawerHeader>
         <NavMenu />
-    </MudDrawer>
+    </MudDrawer>*@
     <MudMainContent>
-        <MudPaper Width="100%">
-            <MudContainer Fixed="true">
-                @Body
-            </MudContainer>
-        </MudPaper>
-        
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 

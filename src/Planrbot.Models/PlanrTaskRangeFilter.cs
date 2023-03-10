@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Planrbot.Common;
 
 public record PlanrTaskRangeFilter : IValidatableObject
 {
@@ -8,21 +8,6 @@ public record PlanrTaskRangeFilter : IValidatableObject
 	public DateOnly? From { get; init; }
 	public DateOnly? To { get; init; }
 	public DayOfWeek? FirstDayOfWeek { get; init; } = DayOfWeek.Sunday;
-	[NotMapped]
-	public DateOnly? StartOfWeekDate
-	{
-		get
-		{
-			if (WeekDate == null || FirstDayOfWeek == null) return null;
-			var daysSinceStartOfWeek = (int)WeekDate.Value.DayOfWeek - (int)FirstDayOfWeek.Value;
-			if (daysSinceStartOfWeek < 0)
-			{
-				daysSinceStartOfWeek += 7;
-			}
-			return WeekDate.Value.AddDays(daysSinceStartOfWeek * -1);
-		}
-	}
-
 	public (DateOnly From, DateOnly To) ToDateTuple()
 	{
 		DateOnly start;
@@ -37,19 +22,15 @@ public record PlanrTaskRangeFilter : IValidatableObject
 			start = From.Value;
 			end = To.Value;
 		}
-		else if (StartOfWeekDate.HasValue)
+		else if (WeekDate.HasValue && FirstDayOfWeek.HasValue)
 		{
-			start = StartOfWeekDate.Value;
-			end = StartOfWeekDate.Value.AddDays(6);
+			start = DateHelpers.GetFirstDayOfWeek(WeekDate.Value, FirstDayOfWeek.Value);
+			end = start.AddDays(6);
 		}
 		else
 		{
-			var startWeek = new PlanrTaskRangeFilter
-			{
-				WeekDate = DateOnly.FromDateTime(DateTime.Today)
-			}.StartOfWeekDate;
-			start = startWeek.Value;
-			end = startWeek.Value.AddDays(6);
+			start = DateHelpers.GetFirstDayOfWeek(DateOnly.FromDateTime(DateTime.Today), FirstDayOfWeek.Value);
+			end = start.AddDays(6);
 		}
 		return (start, end);
 	}
