@@ -8,7 +8,10 @@ builder.Services.AddHttpClient("Planrbot.Web.ServerAPI", client => client.BaseAd
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Planrbot.Web.ServerAPI"));
 
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(options =>
+{
+	options.PopoverOptions.ThrowOnDuplicateProvider = false;
+});
 
 builder.Services.AddFluxor(opt =>
 {

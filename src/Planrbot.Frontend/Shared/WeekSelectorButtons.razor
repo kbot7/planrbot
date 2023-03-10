@@ -40,11 +40,10 @@
     [Inject]
     public IDispatcher? Dispatcher { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Dispatcher?.Dispatch(new GetTasksByWeek(WeekDate.Value));
-        await _picker.GoToDate(WeekDate.Value);
-        await base.OnInitializedAsync();
+        base.OnInitialized();
     }
 
     private void ExecuteQuery()
