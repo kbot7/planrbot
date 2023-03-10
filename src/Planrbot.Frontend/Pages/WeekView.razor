@@ -22,7 +22,7 @@
             @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
                 <MudItem>
-                    <DayToDoListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Value.Date.DayOfWeek == day).Select(t => t.Value)" />
+                    <DayListCard Day="day" Items="_todoState.Value.ToDoItems.Where(t => t.Value.Date.DayOfWeek == day).Select(t => t.Value)" />
                 </MudItem>
             }
         }
