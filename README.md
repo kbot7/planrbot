@@ -35,6 +35,7 @@ A personal planner app
 - Several iOS apps have nice, plain weekly planner UIs
   - https://apps.apple.com/us/app/weekly-planner-diary-notes/id1187285712
   - https://apps.apple.com/us/app/planner-daily-weekly-calendar/id1538190047
+- What about a retro 90's PDA UX? It'd appeal to a certain kind of dork. It's also a UI with a vertical aspect ratio. Making it perfect to adapt to a mobile UI or sidebar UI.
 
 # Devices
 - Web via Blazor
