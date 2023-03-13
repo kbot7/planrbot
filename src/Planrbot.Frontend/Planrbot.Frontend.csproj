@@ -6,6 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 		<UserSecretsId>cf031a48-cc42-4d9e-b412-c70ec43a0abb</UserSecretsId>
+		<RunAOTCompilation>true</RunAOTCompilation>
+		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
 
 	<ItemGroup>

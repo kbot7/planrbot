@@ -11,6 +11,7 @@ A personal planner app
 - [ ] Add autocomplete to DayListCard [see here](https://mudblazor.com/components/autocomplete#api)
 ### Server
 - [ ] Setup OAuth plumbing to work with any OAuth provier (like Apple, Google, Microsoft, or Discord)
+- [ ] Add MFA support, like WebAuthN
 - [ ] Setup SignalR hub
 ### Other Apps
 - [ ] Setup Blazor MAUI Project
