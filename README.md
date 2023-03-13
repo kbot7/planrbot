@@ -5,9 +5,9 @@ A personal planner app
 
 # To Do
 ### Blazor
-- [ ] Implement delete in DayListCard
+- [x] Implement delete in DayListCard
 - [ ] Add dropzone support to DayListCard [see here](https://mudblazor.com/components/dropzone#api)
-- [ ] Implement basic create in DayListCard
+- [x] Implement basic create in DayListCard
 - [ ] Add autocomplete to DayListCard [see here](https://mudblazor.com/components/autocomplete#api)
 ### Server
 - [ ] Setup OAuth plumbing to work with any OAuth provier (like Apple, Google, Microsoft, or Discord)
@@ -44,4 +44,12 @@ A personal planner app
 
 
 # Beyond Initial Scope
+- Import/Export
+    - Initially just to files. Maybe in markdown, json, or plaintext
+- Syncing support to Apple Reminders (via applescript agent?), Google Calendar, etc
 - IFTTT-like integration for completing or adding tasks
+
+# Apple Reminders Syncing Notes
+- No REST API available
+- [https://developer.apple.com/documentation/eventkit](EventKit SDK Details)
+- Will need native app for syncing via EventKit
