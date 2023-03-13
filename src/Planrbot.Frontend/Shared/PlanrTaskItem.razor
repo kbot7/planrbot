@@ -1,6 +1,6 @@
 ﻿<MudItem >
     <MudCheckBox @bind-Checked="@Model.IsComplete" @bind-Checked:after="ItemChanged" Color="Color.Primary" Dense="true" KeyboardEnabled="false">
-        <MudItem Class="pointer-events-auto" Style="min-width: 250px;" @onmouseover="MouseOver" @onmouseout="MouseOut">
+        <MudItem Class="pointer-events-auto" Style="min-width: 250px;" @onmouseover="MouseOver" @onmouseleave="MouseLeave">
             <MudTextField @bind-Value="@Model.Description" @bind-Value:after="ItemChanged" Variant="Variant.Text" Margin="Margin.Dense" Adornment="_adornment" AdornmentIcon="@Icons.Material.Filled.Delete" OnAdornmentClick="DispatchDeletePlanrTask" />
         </MudItem>
     </MudCheckBox>
@@ -20,7 +20,7 @@
     private Adornment _adornment => _showDelete ? Adornment.End : Adornment.None;
 
     private void MouseOver(MouseEventArgs e) { _showDelete = true; }
-    private void MouseOut(MouseEventArgs e) { _showDelete = false; }
+    private void MouseLeave(MouseEventArgs e) { _showDelete = false; }
 
     private void ItemChanged()
     {
