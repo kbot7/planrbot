@@ -38,4 +38,18 @@ public static class Reducers
 			Week = week
 		};
 	}
+
+	[ReducerMethod]
+	public static GetWeekState ReduceDeleteTaskAction(GetWeekState state, DeleteTaskResult action)
+	{
+		state.Deconstruct(out bool loading, out IDictionary<Guid, PlanrTaskViewModel> items, out DateTime week);
+
+		items.Remove(action.Id);
+		return state with
+		{
+			ToDoItems = items,
+			IsLoading = loading,
+			Week = week
+		};
+	}
 }

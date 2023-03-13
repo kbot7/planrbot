@@ -79,6 +79,37 @@ public class GetWeekHttpEffect // : Effect<GetTasksByWeek>
 	}
 
 	[EffectMethod]
+	public async Task HandleDeleteTaskAsync(DeleteTask action, IDispatcher dispatcher)
+	{
+		var http = _httpFactory.CreateClient("Planrbot.Web.ServerAPI");
+		try
+		{
+			var result = await http.DeleteAsync($"api/ToDo/{action.Id}");
+			var success = result.IsSuccessStatusCode;
+			var errorMessage = success == false ? "HTTP Error" : null;
+			var resultAction = new DeleteTaskResult(action.Id, success, errorMessage);
+			dispatcher.Dispatch(resultAction);
+		}
+		//catch (AccessTokenNotAvailableException exception)
+		//{
+		//    exception.Redirect();
+		//}
+		catch (Exception ex)
+		{
+			dispatcher.Dispatch(new DeleteTaskResult(action.Id, false, ex.Message));
+			throw;
+		}
+	}
+
+	[EffectMethod]
+	public Task HandleDeleteTaskResultAsync(DeleteTaskResult action, IDispatcher dispatcher)
+	{
+		var message = action.Success ? "successful" : "unsuccessful";
+		_snackbar.Add($"Delete task {message}", action.Success ? Severity.Normal : Severity.Error);
+		return Task.CompletedTask;
+	}
+
+	[EffectMethod]
 	public Task HandleUpdateTaskAsync(UpdateTaskResult action, IDispatcher dispatcher)
 	{
 		_snackbar.Add("Update task successful");

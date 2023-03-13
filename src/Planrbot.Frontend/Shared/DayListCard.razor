@@ -10,11 +10,7 @@
     <MudCardContent>
         @foreach (var item in Items.Where(t => t.Date.DayOfWeek == Date.DayOfWeek))
         {
-            <MudItem>
-                <MudCheckBox @bind-Checked="@item.IsComplete" @bind-Checked:after="() => ItemChanged(item)" Color="Color.Primary" Dense="true" KeyboardEnabled="false">
-                    <MudTextField @bind-Value="@item.Description" @bind-Value:after="() => {item.EditModeOn = false; ItemChanged(item); }" Variant="Variant.Text" Margin="Margin.Dense"></MudTextField>
-                </MudCheckBox>
-            </MudItem>
+            <PlanrTaskItem Model="item" />
         }
     </MudCardContent>
     <MudCardActions>
@@ -29,18 +25,10 @@
     [Parameter]
     public IEnumerable<PlanrTaskViewModel> Items { get; set; }
 
-    private bool NewTaskOpen { get; set; }
+    private bool _showDeleteButton;
 
     [Inject]
     public IDispatcher? Dispatcher { get; set; }
-
-    private Task ItemChanged(PlanrTaskViewModel item)
-    {
-        Logger.LogInformation("Item Changed | Item: {0}", item);
-        var updateAction = new UpdateTask(item);
-        Dispatcher?.Dispatch(updateAction);
-        return Task.CompletedTask;
-    }
 
     private Task DispatchCreatePlanrTask()
     {
@@ -53,6 +41,4 @@
         Dispatcher?.Dispatch(createAction);
         return Task.CompletedTask;
     }
-
-    
 }

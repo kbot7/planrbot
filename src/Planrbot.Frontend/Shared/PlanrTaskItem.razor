@@ -1,0 +1,37 @@
+﻿<MudItem >
+    <MudCheckBox @bind-Checked="@Model.IsComplete" @bind-Checked:after="ItemChanged" Color="Color.Primary" Dense="true" KeyboardEnabled="false">
+        <MudItem Class="pointer-events-auto" Style="min-width: 250px;" @onmouseover="MouseOver" @onmouseout="MouseOut">
+            <MudTextField @bind-Value="@Model.Description" @bind-Value:after="ItemChanged" Variant="Variant.Text" Margin="Margin.Dense" Adornment="_adornment" AdornmentIcon="@Icons.Material.Filled.Delete" OnAdornmentClick="DispatchDeletePlanrTask" />
+        </MudItem>
+    </MudCheckBox>
+</MudItem>
+
+@code {
+    [Parameter]
+    public PlanrTaskViewModel Model { get; set; }
+
+    [Inject]
+    public IDispatcher? Dispatcher { get; set; }
+
+    [Inject]
+    public ILogger<PlanrTaskItem> Logger {get; set;}
+
+    private bool _showDelete;
+    private Adornment _adornment => _showDelete ? Adornment.End : Adornment.None;
+
+    private void MouseOver(MouseEventArgs e) { _showDelete = true; }
+    private void MouseOut(MouseEventArgs e) { _showDelete = false; }
+
+    private void ItemChanged()
+    {
+        Logger.LogInformation("Item Changed | Item: {0}", Model);
+        var updateAction = new UpdateTask(Model);
+        Dispatcher?.Dispatch(updateAction);
+    }
+
+    private void DispatchDeletePlanrTask()
+    {
+        var deleteAction = new DeleteTask(Model.Id);
+        Dispatcher?.Dispatch(deleteAction);
+    }
+}

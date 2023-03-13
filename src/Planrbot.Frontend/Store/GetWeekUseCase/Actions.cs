@@ -11,5 +11,4 @@ public record GetTask(Guid Id);
 public record GetTaskResult(PlanrTaskViewModel Item);
 public record GetTaskError(string Error);
 public record DeleteTask(Guid Id);
-public record DeleteTaskResult(bool Success);
-public record DeleteTaskError(string Error);
+public record DeleteTaskResult(Guid Id, bool Success, string? Error = default);

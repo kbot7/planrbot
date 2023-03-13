@@ -29,6 +29,6 @@ namespace Planrbot.Frontend.Store.TodoUseCase;
 public record GetWeekState(bool IsLoading, IDictionary<Guid, PlanrTaskViewModel> ToDoItems, DateTime Week);
 
 public class PlanrTaskViewModel : PlanrTask
-{
-	public bool EditModeOn { get; set; }
+{ 
+
 }
