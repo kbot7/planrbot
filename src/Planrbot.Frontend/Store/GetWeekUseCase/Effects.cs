@@ -20,8 +20,8 @@ public class GetWeekHttpEffect // : Effect<GetTasksByWeek>
 		try
 		{
 			var http = _httpFactory.CreateClient("Planrbot.Web.ServerAPI");
-			var items = await http.GetFromJsonAsync<PlanrTask[]>($"api/ToDo?weekDate={action.Week:yyyy-MM-dd}");
-			dispatcher.Dispatch(new GetTasksSuccess(items ?? Array.Empty<PlanrTask>(), action.Week));
+			var items = await http.GetFromJsonAsync<PlanrTaskViewModel[]>($"api/ToDo?weekDate={action.Week:yyyy-MM-dd}");
+			dispatcher.Dispatch(new GetTasksSuccess(items ?? Array.Empty<PlanrTaskViewModel>(), action.Week));
 		}
 		//catch (AccessTokenNotAvailableException exception)
 		//{
@@ -41,7 +41,29 @@ public class GetWeekHttpEffect // : Effect<GetTasksByWeek>
 		try
 		{
 			var result = await http.PutAsJsonAsync<PlanrTask>($"api/ToDo/{action.Item.Id}", action.Item);
-			var item = await result.Content.ReadFromJsonAsync<PlanrTask>();
+			var item = await result.Content.ReadFromJsonAsync<PlanrTaskViewModel>();
+			var resultAction = new UpdateTaskResult(item);
+			dispatcher.Dispatch(resultAction);
+		}
+		//catch (AccessTokenNotAvailableException exception)
+		//{
+		//    exception.Redirect();
+		//}
+		catch (Exception ex)
+		{
+			dispatcher.Dispatch(new UpdateTaskError(ex.Message));
+			throw;
+		}
+	}
+
+	[EffectMethod]
+	public async Task HandleUpdateTaskAsync(AddTask action, IDispatcher dispatcher)
+	{
+		var http = _httpFactory.CreateClient("Planrbot.Web.ServerAPI");
+		try
+		{
+			var result = await http.PostAsJsonAsync<PlanrTask>($"api/ToDo", action.Item);
+			var item = await result.Content.ReadFromJsonAsync<PlanrTaskViewModel>();
 			var resultAction = new UpdateTaskResult(item);
 			dispatcher.Dispatch(resultAction);
 		}

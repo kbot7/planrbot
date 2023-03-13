@@ -5,34 +5,54 @@
 
 <MudCard>
     <MudCardHeader>
-        <MudText Typo="Typo.h6" GutterBottom="true">@Day - @Items.First().Date.ToString("MM-dd")</MudText>
+        <MudText Typo="Typo.h6" GutterBottom="true">@Date.DayOfWeek - @Date.ToString("MM-dd")</MudText>
     </MudCardHeader>
     <MudCardContent>
-        @foreach (var item in Items.Where(t => t.Date.DayOfWeek == Day))
+        @foreach (var item in Items.Where(t => t.Date.DayOfWeek == Date.DayOfWeek))
         {
-            <MudCheckBox @bind-Checked="@item.IsComplete" @bind-Checked:after="() => ItemChanged(item)" Label="@item.Description" Color="Color.Primary"></MudCheckBox>
+            <MudItem>
+                <MudCheckBox @bind-Checked="@item.IsComplete" @bind-Checked:after="() => ItemChanged(item)" Color="Color.Primary" Dense="true" KeyboardEnabled="false">
+                    <MudTextField @bind-Value="@item.Description" @bind-Value:after="() => {item.EditModeOn = false; ItemChanged(item); }" Variant="Variant.Text" Margin="Margin.Dense"></MudTextField>
+                </MudCheckBox>
+            </MudItem>
         }
     </MudCardContent>
     <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Day View</MudButton>
+        <MudButton OnClick="@(() => DispatchCreatePlanrTask())" StartIcon="@Icons.Material.Filled.Add" FullWidth="true" Class="rounded-lg py-2">Add Task</MudButton>
     </MudCardActions>
 </MudCard>
 
 @code {
     [Parameter]
-    public DayOfWeek Day { get; set; }
+    public DateOnly Date { get; set; }
 
     [Parameter]
-    public IEnumerable<PlanrTask> Items { get; set; }
+    public IEnumerable<PlanrTaskViewModel> Items { get; set; }
+
+    private bool NewTaskOpen { get; set; }
 
     [Inject]
     public IDispatcher? Dispatcher { get; set; }
 
-    private Task ItemChanged(PlanrTask item)
+    private Task ItemChanged(PlanrTaskViewModel item)
     {
         Logger.LogInformation("Item Changed | Item: {0}", item);
         var updateAction = new UpdateTask(item);
         Dispatcher?.Dispatch(updateAction);
         return Task.CompletedTask;
     }
+
+    private Task DispatchCreatePlanrTask()
+    {
+        var task = new PlanrTaskViewModel
+        {
+            Date = this.Date,
+            Description = "New Task"
+        };
+        var createAction = new AddTask(task);
+        Dispatcher?.Dispatch(createAction);
+        return Task.CompletedTask;
+    }
+
+    
 }
