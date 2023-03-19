@@ -45,6 +45,7 @@ A personal planner app
 
 
 # Beyond Initial Scope
+- GDPR / CCPA compliant
 - Import/Export
     - Initially just to files. Maybe in markdown, json, or plaintext
 - Syncing support to Apple Reminders (via applescript agent?), Google Calendar, etc
