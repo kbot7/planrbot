@@ -29,6 +29,14 @@ A personal planner app
 - It should feel fun and rewarding, above all else.
 - It should be simple - no tags, extra fields, or big forms.
 - It must be convenient and quick to view and complete tasks.
+- Target users: neurodiverse people, kids, or anyone that wants easy planning and fun feedback
+
+# Mascot Ideas
+- Would a mascot be useful?
+- A cute little robot pal that celebrates when you complete tasks
+- Maybe it eats completed tasks? And it likes to be fed multiple times a day?
+- It would be interesting to have it in a corner, constantly emoting and reacting as you add and complete tasks
+- CRITICAL: It should only CELEBRATE with the user. It MUST express either neutral or happy emotion. NEVER negativity or shame.
 
 # UI Thoughts
 - It should look like a plain ol' planner. Something like [this](https://m.media-amazon.com/images/I/81C3FUIA8nL.jpg)
