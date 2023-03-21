@@ -63,3 +63,10 @@ A personal planner app
 - No REST API available
 - [https://developer.apple.com/documentation/eventkit](EventKit SDK Details)
 - Will need native app for syncing via EventKit
+
+
+What if the UX is customizable, and allows users to make a template like the screenshot below. There could be many different templates to choose from. 
+
+This would be just like shopping for planners at a store. Different styles and templates to choose from.
+
+![Planner2](planner2.PNG)
