@@ -69,4 +69,4 @@ What if the UX is customizable, and allows users to make a template like the scr
 
 This would be just like shopping for planners at a store. Different styles and templates to choose from.
 
-![Planner2](planner2.PNG)
+![Planner2](planner2.png)
